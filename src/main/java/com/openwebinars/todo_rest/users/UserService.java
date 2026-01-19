@@ -1,0 +1,29 @@
+package com.openwebinars.todo_rest.users;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class UserService {
+
+    private final UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User register(NewUserCommand cmd) {
+        User user = User.builder()
+                .username(cmd.username())
+                .email(cmd.email())
+                .password(passwordEncoder.encode(cmd.password()))
+                .isAdmin(false)
+                .build();
+        return userRepository.save(user);
+    }
+
+
+
+}
